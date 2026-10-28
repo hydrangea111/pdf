@@ -316,7 +316,7 @@
   <div class="controls">
     <div class="field">
       <label>저장 파일명</label>
-      <input type="text" id="fname" placeholder="파일명 (기본: converted)">
+      <input type="text" id="fname" placeholder="파일명 (기본: 첫파일명_new_pdf)">
     </div>
     <div class="row">
       <button class="btn" onclick="sortFiles(1)">가나다순 ↑</button>
@@ -513,11 +513,20 @@ function sortFiles(dir = 1) {
 }
 
 // UI 상태 업데이트 (순번 갱신)
+// 기본 파일명: 첫 번째 파일 이름(확장자 제외) + _new_pdf
+function defaultName() {
+  const first = preview.firstElementChild;
+  const entry = first && files.find(f => f.id === Number(first.dataset.id));
+  const base = entry ? entry.file.name.replace(/\.[^.]*$/, '') : 'converted';
+  return base + '_new_pdf';
+}
+
 function updateUI() {
   const count = preview.children.length;
   dlBtn.disabled = count === 0;
   badge.style.display = count ? 'block' : 'none';
   badge.textContent = `파일 ${count}개`;
+  document.getElementById('fname').placeholder = `파일명 (기본: ${defaultName()})`;
   [...preview.children].forEach((el, i) => {
     el.querySelector('.thumb-num').textContent = i + 1;
   });
@@ -581,7 +590,7 @@ async function makePDF() {
   const items = [...preview.querySelectorAll('.thumb-wrap')];
   if (!items.length) return;
 
-  const rawName = document.getElementById('fname').value.trim() || 'converted';
+  const rawName = document.getElementById('fname').value.trim() || defaultName();
   const safeName = rawName.replace(/[:\\/*?"<>|]/g, '_');
 
   dlBtn.disabled = true;
