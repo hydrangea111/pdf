@@ -296,6 +296,25 @@
     text-align: right;
   }
 </style>
+<style>
+html[data-theme="dark"]{color-scheme:dark;--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--ink2:#94a3b8;--accent:#60a5fa;--accent2:#172554;--border:#334155;--danger:#f87171}
+html[data-theme="dark"] body{background:var(--bg)}
+html[data-theme="dark"] .btn-primary{background:#2563eb;border-color:#2563eb}
+html[data-theme="dark"] .btn:hover{border-color:#64748b}
+html[data-theme="dark"] .btn:active{background:#334155}
+html[data-theme="dark"] .btn-primary:disabled{background:#334155;border-color:#334155}
+html[data-theme="dark"] #drop-zone{border-color:#475569}
+#theme-toggle{position:fixed;right:10px;bottom:10px;width:26px;height:26px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;font:14px/26px system-ui,sans-serif;text-align:center;cursor:pointer;opacity:.28;z-index:2147483000;transition:opacity .15s}
+#theme-toggle:hover,#theme-toggle:focus-visible{opacity:.85}
+@media print{#theme-toggle{display:none}}
+</style>
+<script>
+(function(){var r=document.documentElement,m=matchMedia('(prefers-color-scheme: dark)');
+function saved(){try{var s=localStorage.getItem('theme');return s==='light'||s==='dark'?s:null}catch(e){return null}}
+function apply(){r.dataset.theme=saved()||(m.matches?'dark':'light')}
+apply();m.addEventListener('change',apply);
+window.__toggleTheme=function(){var n=r.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('theme',n)}catch(e){}r.dataset.theme=n}})();
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -660,5 +679,6 @@ function setProgress(cur, total) {
     : '저장 중…';
 }
 </script>
+<button id="theme-toggle" type="button" aria-label="다크 모드 전환" title="다크 모드 전환" onclick="__toggleTheme()">◐</button>
 </body>
 </html>
